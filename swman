@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Sets the variable ID_LIKE containing the most generic 
+# Sets the variable ID_LIKE containing the most generic
 # distribution name.
 # Example: ID_LIKE=arch, or ID_LIKE=debian
 detectLinuxDistribution() {
   eval `cat /etc/*-release | grep ID_LIKE`
 }
 
-# DO NOT CHANGE! This is needed to detect the distrbution name.
+# DO NOT CHANGE! This is needed to detect the distribution name.
 detectLinuxDistribution
 
 # Query if a package is already installed.
@@ -24,10 +24,31 @@ packageQuery() {
   return 0
 }
 
-package=mosquitto
+packageInstall() {
+  local packageName=$1
+  if [ $ID_LIKE = arch ]; then
+    echo "install arch $packageName"
+  fi
+  if [ $ID_LIKE = debian ]; then
+    apt-get --yes --force-yes -q=2 install $packageName
+  fi
+}
+
+packageUninstall() {
+  local packageName=$1
+  if [ $ID_LIKE = arch ]; then
+    echo "uninstall arch $packageName"
+  fi
+  if [ $ID_LIKE = debian ]; then
+    apt-get --yes --force-yes -q=2 --purge autoremove $packageName
+  fi
+}
+
+package=git
+#mosquitto
 
 packageQuery $package
 if [ $? != 0 ]; then
-  echo "install $package"
+  packageInstall $package
 fi
 exit 0
