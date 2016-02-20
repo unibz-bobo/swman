@@ -27,7 +27,7 @@ packageQuery() {
 packageInstall() {
   local packageName=$1
   if [ $ID_LIKE = arch ]; then
-    echo "install arch $packageName"
+    pacman --noconfirm -S $packageName
   fi
   if [ $ID_LIKE = debian ]; then
     apt-get --yes --force-yes -q=2 install $packageName
@@ -37,14 +37,14 @@ packageInstall() {
 packageUninstall() {
   local packageName=$1
   if [ $ID_LIKE = arch ]; then
-    echo "uninstall arch $packageName"
+    pacman --noconfirm -R $packageName
   fi
   if [ $ID_LIKE = debian ]; then
     apt-get --yes --force-yes -q=2 --purge autoremove $packageName
   fi
 }
 
-package=git
+package=lynx
 #mosquitto
 
 packageQuery $package
