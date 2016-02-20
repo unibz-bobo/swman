@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Sets the variable ID_LIKE containing the most generic 
+# distribution name.
+# Example: ID_LIKE=arch, or ID_LIKE=debian
+detectLinuxDistribution() {
+  eval `cat /etc/*-release | grep ID_LIKE`
+}
+
+detectLinuxDistribution
+echo "DISTRO=$ID_LIKE"
+exit 0
