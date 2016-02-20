@@ -24,13 +24,26 @@ packageQuery() {
   return 0
 }
 
+# Update package databases and upgrade system.
+packageUpdate() {
+  if [ $ID_LIKE = arch ]; then
+    pacman -Syu
+  fi
+  if [ $ID_LIKE = debian ]; then
+    apt-get update
+    apt-get upgrade
+  fi
+}
+
 packageInstall() {
   local packageName=$1
   if [ $ID_LIKE = arch ]; then
     pacman --noconfirm -S $packageName
+    return $?
   fi
   if [ $ID_LIKE = debian ]; then
     apt-get --yes --force-yes -q=2 install $packageName
+    return $?
   fi
 }
 
@@ -38,17 +51,54 @@ packageUninstall() {
   local packageName=$1
   if [ $ID_LIKE = arch ]; then
     pacman --noconfirm -R $packageName
+    return $?
   fi
   if [ $ID_LIKE = debian ]; then
     apt-get --yes --force-yes -q=2 --purge autoremove $packageName
+    return $?
   fi
 }
 
-package=lynx
-#mosquitto
+showUsage() {
+  cat << EOF
+Usage:
+$0 [-u] ... update and upgrade all packages
+$0 [-i <package-name-list>] ... install packages
+$0 [-r <package-name-list>] ... remove packages
+EOF
+}
 
-packageQuery $package
-if [ $? != 0 ]; then
-  packageInstall $package
+while getopts "uir" option; do
+  case $option in
+  u) packageUpdate;     exit 0 ;;
+  i) operation=install;        ;;
+  r) operation=remove;         ;;
+  ?) showUsage;         exit 1 ;;
+  esac
+done
+shift $(( OPTIND - 1 ))
+success=1
+for packageName in $*; do
+  packageQuery $packageName
+  if [ $? != 0 ]; then
+    if [ $operation = install ]; then
+      packageInstall $packageName
+      if [ $? != 0 ]; then
+        exit 1
+      fi
+    fi
+  else
+    if [ $operation = remove ]; then
+      packageUninstall $packageName
+      if [ $? != 0 ]; then
+        exit 1
+      fi
+    fi
+  fi
+  success=0
+done
+if [ $success != 0 ]; then
+  showUsage
+  exit 1
 fi
 exit 0
