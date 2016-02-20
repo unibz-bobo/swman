@@ -7,6 +7,25 @@ detectLinuxDistribution() {
   eval `cat /etc/*-release | grep ID_LIKE`
 }
 
+# DO NOT CHANGE! This is needed to detect the distrbution name.
 detectLinuxDistribution
-echo "DISTRO=$ID_LIKE"
+
+# Query if a package is already installed.
+packageQuery() {
+  local packageName=$1
+  if [ $ID_LIKE = arch ]; then
+    pacman -Qi $packageName > /dev/null
+    return $?
+  fi
+  if [ $ID_LIKE = debian ]; then
+    echo "query debian"
+  fi
+}
+
+package=mosquitto
+
+packageQuery $package
+if [ $? != 0 ]; then
+  echo "install $package"
+fi
 exit 0
