@@ -18,7 +18,7 @@ packageQuery() {
     return $?
   fi
   if [ $ID_LIKE = debian ]; then
-    dpkg-query -l $packageName > /dev/null
+    dpkg-query -l $packageName | grep "^ii" > /dev/null
     return $?
   fi
   return 0
