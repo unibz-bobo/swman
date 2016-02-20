@@ -18,8 +18,10 @@ packageQuery() {
     return $?
   fi
   if [ $ID_LIKE = debian ]; then
-    echo "query debian"
+    dpkg-query -l $packageName > /dev/null
+    return $?
   fi
+  return 0
 }
 
 package=mosquitto
