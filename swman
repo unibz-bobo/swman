@@ -4,18 +4,18 @@ source "$(dirname $0)/swman.lib.sh"
 
 showUsage() {
   cat << EOF
-=======================================================
+========================================================
 Usage:
-=======================================================
-$0 [-a <service-name-list>] ... start service
-$0 [-o <service-name-list>] ... stop service
-$0 [-z <service-name-list>] ... restart service
-$0 [-s <service-name-list>] ... query status of service
--------------------------------------------------------
+========================================================
+$0 [-a <service-name-list>] ... start services
+$0 [-o <service-name-list>] ... stop services
+$0 [-z <service-name-list>] ... restart services
+$0 [-s <service-name-list>] ... query status of services
+--------------------------------------------------------
 $0 [-u] ... update and upgrade all packages
 $0 [-i <package-name-list>] ... install packages
 $0 [-r <package-name-list>] ... remove packages
-=======================================================
+========================================================
 EOF
 }
 
