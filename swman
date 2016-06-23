@@ -4,15 +4,27 @@ source "$(dirname $0)/swman.lib.sh"
 
 showUsage() {
   cat << EOF
+=======================================================
 Usage:
+=======================================================
+$0 [-a <service-name-list>] ... start service
+$0 [-o <service-name-list>] ... stop service
+$0 [-z <service-name-list>] ... restart service
+$0 [-s <service-name-list>] ... query status of service
+-------------------------------------------------------
 $0 [-u] ... update and upgrade all packages
 $0 [-i <package-name-list>] ... install packages
 $0 [-r <package-name-list>] ... remove packages
+=======================================================
 EOF
 }
 
-while getopts "uir" option; do
+while getopts "aozsuir" option; do
   case $option in
+  a) operation=start;          ;;
+  o) operation=stop;           ;;
+  z) operation=restart;        ;;
+  s) operation=status;         ;;
   u) packageUpdate;     exit 0 ;;
   i) operation=install;        ;;
   r) operation=remove;         ;;
@@ -36,6 +48,30 @@ for packageName in $*; do
       if [ $? != 0 ]; then
         exit 1
       fi
+    fi
+  fi
+  if [ $operation = start ]; then
+    serviceStart $packageName
+    if [ $? != 0 ]; then
+      exit 1
+    fi
+  fi
+  if [ $operation = stop ]; then
+    serviceStop $packageName
+    if [ $? != 0 ]; then
+      exit 1
+    fi
+  fi
+  if [ $operation = restart ]; then
+    serviceRestart $packageName
+    if [ $? != 0 ]; then
+      exit 1
+    fi
+  fi
+  if [ $operation = status ]; then
+    serviceStatus $packageName
+    if [ $? != 0 ]; then
+      exit 1
     fi
   fi
   success=0
