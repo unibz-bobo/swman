@@ -149,3 +149,8 @@ packageUninstall() {
     return $?
   fi
 }
+
+#Guess what?
+runAsRoot() {
+  sudo bash -c ". $BASH_SOURCE; $1 ${@: +2}"
+}
