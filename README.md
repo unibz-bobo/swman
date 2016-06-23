@@ -5,6 +5,14 @@ and use it in your scripts.
 
 ## Examples
 
+`./swman -a <service-names>` to start services.
+
+`./swman -o <service-names>` to stop services.
+
+`./swman -z <service-names>` to restart services.
+
+`./swman -s <service-names>` to query the status of services.
+
 `./swman -u` to update and upgrade existing software packages.
 
 `./swman -i <package-names>` to install new packages, existing packages 
