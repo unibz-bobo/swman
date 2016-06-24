@@ -82,7 +82,9 @@ serviceStatus() {
 # distribution name.
 # Example: ID_LIKE=arch, or ID_LIKE=debian
 detectLinuxDistribution() {
-  eval `cat /etc/*-release | grep ID_LIKE`
+  eval `cat /etc/*-release | grep ID_LIKE` # debian, arch, ...
+  eval `cat /etc/*-release | grep ID`      # ubuntu, raspbian, ...
+  eval `cat /etc/*-release | grep VERSION` # Verbose ver. May contain substrings: wheezy, Xenial Xerus, Rolling ...
 }
 
 # DO NOT CHANGE! This is needed to detect the distribution name.
