@@ -4,7 +4,7 @@
 # init system.
 # Example: INIT_LIKE=systemd, or ID_LIKE=sysvinit
 detectInitSystem() {
-  which systemd > /dev/null 2>&1
+  which systemctl > /dev/null 2>&1
   if [ $? = 0 ]; then
     INIT_LIKE=systemd
     return
